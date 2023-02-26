@@ -9,6 +9,7 @@
     "talks":"说说",
     "message": "留言",
     "friends": "朋友们",
+    "music": "音乐",
     "album": "相册",
     "search": "搜索结果",
     "not-found": "无法找到页面"
@@ -24,6 +25,7 @@
     "tag_list": "标签目录",
     "message": "留言",
     "friends": "朋友们",
+    "music": "一起听音乐",
     "toc": "文章目录",
     "comment": "评论区",
     "recent_comment": "最近评论",

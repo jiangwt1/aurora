@@ -52,6 +52,11 @@ const routes = [
     component: () => import('../views/FriendLink.vue')
   },
   {
+    path: '/music',
+    name: 'Music',
+    component:()  => import('../views/Music.vue')
+  },
+  {
     path: '/photos/:albumId',
     name: 'Photos',
     component: () => import('../views/Photos.vue')
@@ -70,11 +75,6 @@ const routes = [
     path: '/:catchAll(.*)',
     redirect: '/404',
     hidden: true
-  },
-  {
-    path: '/Music',
-    name: 'Music',
-    component:() => import('../views/Music.vue')
   }
 ]
 

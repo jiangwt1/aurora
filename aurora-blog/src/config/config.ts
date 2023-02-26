@@ -72,11 +72,12 @@ export default {
     },
     {
       name: 'Music',
-      path: '/Music',
+      path: '/music',
       i18n: {
         cn: '音乐',
         en: 'Music'
-      }
+      },
+      children: []
     }
   ]
 }

@@ -1,0 +1,8 @@
+/aurora-admin/node_modules/
+/aurora-blog/node_modules/
+/aurora-springboot/node_modules/
+/aurora-blog/dist/
+/aurora-blog/.idea/
+/aurora-springboot/.idea/
+/aurora-admin/.idea/
+/.idea/
