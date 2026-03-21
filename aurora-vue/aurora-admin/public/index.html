@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>后台管理系统</title>
+    <script src="<%= BASE_URL %>lib/js/prism.js" data-manual></script>
+    <!-- Mermaid 流程图库 - 延迟加载，提升页面加载速度 -->
+    <script>
+      // 延迟加载 Mermaid，避免阻塞页面加载
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
+        script.async = true;
+        document.head.appendChild(script);
+      });
+    </script>
+    <link rel="stylesheet" href="<%= BASE_URL %>lib/css/prism.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

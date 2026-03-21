@@ -1,0 +1,33 @@
+/* Naive UI 主题覆盖 */
+.n-layout {
+  background-color: #f5f6fb;
+}
+
+.n-layout-sider {
+  background-color: #fff;
+}
+
+.n-card {
+  border-radius: 10px;
+}
+
+.n-button {
+  border-radius: 4px;
+}
+
+.n-input {
+  border-radius: 4px;
+}
+
+.n-select {
+  border-radius: 4px;
+}
+
+/* 自定义主题色 */
+:root {
+  --primary-color: #409EFF;
+  --success-color: #67C23A;
+  --warning-color: #E6A23C;
+  --danger-color: #F56C6C;
+  --info-color: #909399;
+}

@@ -1,0 +1,10 @@
+打包流程：
+  # 开发环境启动
+  npm run dev        # 使用 .env.dev 配置
+  # 生产环境打包
+  npm run build      # 使用 .env.prod 配置，输出到 dist 目录
+  # 预览打包结果
+  npm run preview    # 本地预览 dist 目录
+  配置文件说明：
+  - .env.dev - 开发环境，代理到 http://127.0.0.1（本地后端）
+  - .env.prod - 生产环境，直连 http://服务器ip
