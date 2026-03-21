@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: aurora-springboot
+  profiles:
+    active: prod
