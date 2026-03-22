@@ -44,7 +44,10 @@
     <n-modal v-model:show="showPublishModal" preset="card" title="发布文章" style="width: 700px" :z-index="10000">
       <n-form ref="formRef" :model="article" label-width="100px" label-placement="left">
         <!-- 文章分类 -->
-        <n-form-item label="文章分类" path="categoryName">
+        <n-form-item path="categoryName">
+          <template #label>
+            <span class="required-label">文章分类</span>
+          </template>
           <n-space v-if="article.categoryName" align="center">
             <n-tag type="success" closable @close="removeCategory">
               {{ article.categoryName }}
@@ -57,18 +60,16 @@
             </template>
             <n-space vertical>
               <n-text strong>分类</n-text>
-              <n-auto-complete
+              <n-input
                 v-model:value="categoryName"
-                :options="categoryOptions"
                 placeholder="请输入分类名搜索，enter可添加自定义分类"
                 clearable
-                @select="handleSelectCategory"
                 @keyup.enter="saveCategory"
               />
               <n-divider style="margin: 8px 0" />
               <div class="popover-container">
                 <div
-                  v-for="item in categoryList"
+                  v-for="item in filteredCategoryList"
                   :key="item.id"
                   class="category-item"
                   @click="addCategory(item)"
@@ -81,7 +82,10 @@
         </n-form-item>
 
         <!-- 文章标签 -->
-        <n-form-item label="文章标签">
+        <n-form-item>
+          <template #label>
+            <span class="required-label">文章标签</span>
+          </template>
           <n-space align="center">
             <n-space v-if="article.tagNames.length > 0">
               <n-tag
@@ -99,19 +103,17 @@
               </template>
               <n-space vertical>
                 <n-text strong>标签</n-text>
-                <n-auto-complete
+                <n-input
                   v-model:value="tagName"
-                  :options="tagOptions"
                   placeholder="请输入标签名搜索，enter可添加自定义标签"
                   clearable
-                  @select="handleSelectTag"
                   @keyup.enter="saveTag"
                 />
                 <n-divider style="margin: 8px 0" />
                 <n-text depth="3">添加标签</n-text>
                 <n-space>
                   <n-tag
-                    v-for="tag in tagList"
+                    v-for="tag in filteredTagList"
                     :key="tag.id"
                     :type="isTagSelected(tag) ? 'primary' : 'default'"
                     checkable
@@ -137,7 +139,10 @@
         </n-form-item>
 
         <!-- 上传封面 -->
-        <n-form-item label="上传封面">
+        <n-form-item>
+          <template #label>
+            <span class="required-label">上传封面</span>
+          </template>
           <template v-if="!article.articleCover">
             <n-upload
               :custom-request="uploadCover"
@@ -209,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NIcon, useMessage, useDialog } from 'naive-ui'
 import { CloudUploadOutline, CloseOutline, DocumentTextOutline, SaveOutline, SendOutline } from '@vicons/ionicons5'
@@ -226,11 +231,25 @@ const dialog = useDialog()
 const showPublishModal = ref(false)
 const categoryName = ref('')
 const tagName = ref('')
-const categoryOptions = ref([])
-const tagOptions = ref([])
 const categoryList = ref([])
 const tagList = ref([])
 const autoSave = ref(true)
+
+// 过滤后的分类列表（根据输入内容过滤）
+const filteredCategoryList = computed(() => {
+  if (!categoryName.value) return categoryList.value
+  return categoryList.value.filter(item =>
+    item.categoryName.toLowerCase().includes(categoryName.value.toLowerCase())
+  )
+})
+
+// 过滤后的标签列表（根据输入内容过滤）
+const filteredTagList = computed(() => {
+  if (!tagName.value) return tagList.value
+  return tagList.value.filter(item =>
+    item.tagName.toLowerCase().includes(tagName.value.toLowerCase())
+  )
+})
 
 // 主题配置
 const theme = ref('light')
@@ -252,6 +271,23 @@ const article = reactive({
   originalUrl: '',
   password: ''
 })
+
+// 重置文章表单
+function resetArticle() {
+  article.id = null
+  article.articleTitle = dayjs().format('YYYY-MM-DD')
+  article.articleContent = ''
+  article.articleAbstract = ''
+  article.articleCover = ''
+  article.categoryName = null
+  article.tagNames = []
+  article.isTop = 0
+  article.isFeatured = 0
+  article.type = 1
+  article.status = 1
+  article.originalUrl = ''
+  article.password = ''
+}
 
 const typeOptions = [
   { label: '原创', value: 1 },
@@ -289,10 +325,6 @@ async function fetchCategories() {
   try {
     const res = await request.get('/api/admin/categories/search')
     categoryList.value = res.data || []
-    categoryOptions.value = categoryList.value.map(item => ({
-      label: item.categoryName,
-      value: item.categoryName
-    }))
   } catch (error) {
     console.error('获取分类失败:', error)
   }
@@ -303,10 +335,6 @@ async function fetchTags() {
   try {
     const res = await request.get('/api/admin/tags/search')
     tagList.value = res.data || []
-    tagOptions.value = tagList.value.map(item => ({
-      label: item.tagName,
-      value: item.tagName
-    }))
   } catch (error) {
     console.error('获取标签失败:', error)
   }
@@ -385,17 +413,14 @@ async function handleUploadImg(files, callback) {
   }
 }
 
-// 保存分类
-function handleSelectCategory(value) {
-  article.categoryName = value
-  categoryName.value = ''
-}
-
+// 保存分类（回车时添加自定义分类）
 function saveCategory() {
-  if (categoryName.value?.trim()) {
-    article.categoryName = categoryName.value.trim()
-    categoryName.value = ''
-  }
+  const input = categoryName.value?.trim()
+  if (!input) return
+
+  // 直接使用用户输入的值
+  article.categoryName = input
+  categoryName.value = ''
 }
 
 function addCategory(item) {
@@ -406,17 +431,14 @@ function removeCategory() {
   article.categoryName = null
 }
 
-// 保存标签
-function handleSelectTag(value) {
-  if (!article.tagNames.includes(value)) {
-    article.tagNames.push(value)
-  }
-  tagName.value = ''
-}
-
+// 保存标签（回车时添加自定义标签）
 function saveTag() {
-  if (tagName.value?.trim() && !article.tagNames.includes(tagName.value.trim())) {
-    article.tagNames.push(tagName.value.trim())
+  const input = tagName.value?.trim()
+  if (!input) return
+
+  // 避免重复添加
+  if (!article.tagNames.includes(input)) {
+    article.tagNames.push(input)
   }
   tagName.value = ''
 }
@@ -495,6 +517,7 @@ async function saveArticle() {
     if (res.flag) {
       message.success(res.message || '保存成功')
       sessionStorage.removeItem('article')
+      resetArticle()
       router.push('/article-list')
     } else {
       message.error(res.message || '保存失败')
@@ -608,5 +631,11 @@ onBeforeUnmount(() => {
 
 :deep(.md-editor-modal) {
   z-index: 2;
+}
+
+/* 必填项标签样式 */
+.required-label::before {
+  content: '* ';
+  color: #d03050;
 }
 </style>

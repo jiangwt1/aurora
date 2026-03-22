@@ -300,8 +300,8 @@
             <n-form-item label="Swagger服务条款" path="swaggerTermsOfServiceUrl">
               <n-input v-model:value="systemConfig.swaggerTermsOfServiceUrl" placeholder="请输入Swagger服务条款URL" style="width: 400px" />
             </n-form-item>
-            <n-form-item label="Swagger API URL" path="swaggerApiUrl">
-              <n-input v-model:value="systemConfig.swaggerApiUrl" placeholder="请输入Swagger API URL" style="width: 400px" />
+            <n-form-item label="Swagger API URL" path="swaggerTermsOfServiceUrlapi">
+              <n-input v-model:value="systemConfig.swaggerTermsOfServiceUrlapi" placeholder="请输入Swagger API URL" style="width: 400px" />
             </n-form-item>
             <n-form-item label="搜索模式" path="searchMode">
               <n-radio-group v-model:value="systemConfig.searchMode">
@@ -460,7 +460,7 @@ const systemConfig = reactive({
   swaggerContactName: '',
   swaggerContactEmail: '',
   swaggerTermsOfServiceUrl: '',
-  swaggerApiUrl: '',
+  swaggerTermsOfServiceUrlapi: '',
   searchMode: 'mysql',
   uploadMode: 'local',
   uploadOssUrl: '',
