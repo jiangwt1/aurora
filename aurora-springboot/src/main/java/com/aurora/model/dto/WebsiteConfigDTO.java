@@ -80,4 +80,5 @@ public class WebsiteConfigDTO {
      */
     private String gonganBeianNumber;
 
+    private String email;
 }

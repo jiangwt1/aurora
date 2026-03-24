@@ -72,8 +72,8 @@ export default defineConfig(({ command, mode }) => {
           target: VITE_BASE_URL || 'http://127.0.0.1:8080',
           changeOrigin: true,
           secure: true,
-          // 保留 /api 前缀，不重写路径
-          rewrite: (path) => path
+          // 保留 /api 前缀，重写路径： 凞成空字符串
+          rewrite: (path) => path.replace(/^\/api/, '')
         }
       }
     },

@@ -43,7 +43,7 @@ export default defineComponent({
       if (!appStore.websiteConfig.websiteCreateTime) {
         return
       }
-      let timeold = new Date().getTime() - new Date(appStore.websiteConfig.websiteCreateTime).getTime()
+      let timeold = new Date().getTime() - new Date(Number(appStore.websiteConfig.websiteCreateTime)).getTime()
       let msPerDay = 24 * 60 * 60 * 1000
       let daysold = Math.floor(timeold / msPerDay)
       let str = ''
