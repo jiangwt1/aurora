@@ -68,7 +68,7 @@
             </button>
           </div>
           <div class="contact-footer">
-            <span class="contact-tip">{{ contactType === 'qq' ? '添加好友时请备注来意' : '扫描二维码或搜索微信号添加' }}</span>
+            <span class="contact-tip">{{ contactType === 'qq' ? '添加好友时请备注来意' : '搜索微信号添加时请备注来意' }}</span>
           </div>
         </div>
       </div>
