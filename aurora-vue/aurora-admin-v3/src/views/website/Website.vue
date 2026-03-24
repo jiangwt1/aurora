@@ -460,14 +460,21 @@ const systemConfig = reactive({
 function fetchWebsiteConfig() {
   getWebsiteConfigApi().then(res => {
     const data = { ...res.data }
-    // 将日期字符串转换为时间戳，确保日期有效
-    if (data.websiteCreateTime && typeof data.websiteCreateTime === 'string') {
-      const date = new Date(data.websiteCreateTime)
-      // 检查日期是否有效
+    // 将日期转换为时间戳，支持时间戳字符串和日期字符串两种格式
+    if (data.websiteCreateTime) {
+      let date
+      if (typeof data.websiteCreateTime === 'number') {
+        date = new Date(data.websiteCreateTime)
+      } else if (/^\d+$/.test(data.websiteCreateTime)) {
+        // 纯数字字符串，当作时间戳处理
+        date = new Date(Number(data.websiteCreateTime))
+      } else {
+        // 日期字符串格式，如 "2023-01-01"
+        date = new Date(data.websiteCreateTime)
+      }
       if (!isNaN(date.getTime())) {
         data.websiteCreateTime = date.getTime()
       } else {
-        // 如果日期无效，设置为null
         data.websiteCreateTime = null
       }
     }
@@ -570,7 +577,13 @@ function handleLoginBgSuccess({ file }) {
 }
 
 function handleSaveWebsiteConfig() {
-  updateWebsiteConfigApi(websiteConfig).then(() => {
+  const data = { ...websiteConfig }
+  // 将时间戳转换为日期字符串
+  if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
+    const date = new Date(data.websiteCreateTime)
+    data.websiteCreateTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+  updateWebsiteConfigApi(data).then(() => {
     message.success('保存网站配置成功')
   }).catch(err => {
     console.error('保存配置失败:', err)

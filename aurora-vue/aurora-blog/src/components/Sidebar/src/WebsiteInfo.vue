@@ -43,7 +43,12 @@ export default defineComponent({
       if (!appStore.websiteConfig.websiteCreateTime) {
         return
       }
-      let timeold = new Date().getTime() - new Date(Number(appStore.websiteConfig.websiteCreateTime)).getTime()
+      const createTime = appStore.websiteConfig.websiteCreateTime
+      // 支持时间戳和日期字符串两种格式
+      const createTimestamp = typeof createTime === 'number' || /^\d+$/.test(createTime)
+        ? Number(createTime)
+        : new Date(createTime).getTime()
+      let timeold = new Date().getTime() - createTimestamp
       let msPerDay = 24 * 60 * 60 * 1000
       let daysold = Math.floor(timeold / msPerDay)
       let str = ''
