@@ -128,10 +128,7 @@
               <n-input v-model:value="socialConfig.qq" placeholder="请输入QQ号" style="width: 400px" />
             </n-form-item>
             <n-form-item label="WeChat">
-              <n-input v-model:value="socialConfig.wechat" placeholder="请输入微信号" style="width: 400px" />
-            </n-form-item>
-            <n-form-item label="邮箱">
-              <n-input v-model:value="socialConfig.email" placeholder="请输入邮箱地址" style="width: 400px" />
+              <n-input v-model:value="socialConfig.weChat" placeholder="请输入微信号" style="width: 400px" />
             </n-form-item>
             <n-form-item label="微博">
               <n-input v-model:value="socialConfig.weibo" placeholder="请输入微博地址" style="width: 400px" />
@@ -419,8 +416,7 @@ const socialConfig = reactive({
   github: '',
   gitee: '',
   qq: '',
-  wechat: '',
-  email: '',
+  weChat: '',
   weibo: '',
   csdn: '',
   zhihu: '',

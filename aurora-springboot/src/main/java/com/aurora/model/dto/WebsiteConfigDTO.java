@@ -79,6 +79,4 @@ public class WebsiteConfigDTO {
      * 公安部备案编号
      */
     private String gonganBeianNumber;
-
-    private String email;
 }
