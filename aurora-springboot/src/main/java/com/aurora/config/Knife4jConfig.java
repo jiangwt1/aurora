@@ -1,8 +1,6 @@
 package com.aurora.config;
 
 
-import com.aurora.service.SystemConfigProviderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,16 +18,11 @@ import java.util.Collections;
 @EnableSwagger2WebMvc
 public class Knife4jConfig {
 
-    @Autowired
-    private SystemConfigProviderService configProvider;
-
     @Bean
     public Docket createRestApi() {
-        String termsOfServiceUrl = configProvider.getConfig("swagger.termsOfServiceUrl", "https://www.gysy.ltd");
-        
         return new Docket(DocumentationType.SWAGGER_2)
                 .protocols(Collections.singleton("https"))
-                .host(termsOfServiceUrl)
+                .host("https://www.gysy.ltd")
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.aurora.controller"))
@@ -38,16 +31,11 @@ public class Knife4jConfig {
     }
 
     private ApiInfo apiInfo() {
-        String contactName = configProvider.getConfig("swagger.contact.name", "admin");
-        String contactEmail = configProvider.getConfig("swagger.contact.email", "");
-        String termsOfServiceUrl = configProvider.getConfig("swagger.termsOfServiceUrl", "https://www.gysy.ltd");
-        String termsOfServiceUrlapi = configProvider.getConfig("swagger.termsOfServiceUrlapi", "https://www.gysy.ltd/api/");
-        
         return new ApiInfoBuilder()
                 .title("aurora文档")
                 .description("aurora")
-                .contact(new Contact(contactName, termsOfServiceUrl, contactEmail))
-                .termsOfServiceUrl(termsOfServiceUrlapi)
+                .contact(new Contact("阳光开朗大男孩儿", "", "940658582@qq.com"))
+                .termsOfServiceUrl("https://www.gysy.ltd/api")
                 .version("1.0")
                 .build();
     }

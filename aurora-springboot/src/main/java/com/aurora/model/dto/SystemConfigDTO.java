@@ -21,14 +21,6 @@ public class SystemConfigDTO {
 
     private String friendLinkEmail;
 
-    private String swaggerContactName;
-
-    private String swaggerContactEmail;
-
-    private String swaggerTermsOfServiceUrl;
-
-    private String swaggerTermsOfServiceUrlapi;
-
     private String searchMode;
 
     private String uploadMode;

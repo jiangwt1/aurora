@@ -37,10 +37,6 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
                 .websiteMessage(configMap.get("website.message"))
                 .friendLinkUrl(configMap.get("friendLink.url"))
                 .friendLinkEmail(configMap.get("friendLink.email"))
-                .swaggerContactName(configMap.get("swagger.contact.name"))
-                .swaggerContactEmail(configMap.get("swagger.contact.email"))
-                .swaggerTermsOfServiceUrl(configMap.get("swagger.termsOfServiceUrl"))
-                .swaggerTermsOfServiceUrlapi(configMap.get("swagger.termsOfServiceUrlapi"))
                 .searchMode(configMap.get("search.mode"))
                 .uploadMode(configMap.get("upload.mode"))
                 .uploadOssUrl(configMap.get("upload.oss.url"))
@@ -71,10 +67,6 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
         configMap.put("website.message", systemConfigVO.getWebsiteMessage());
         configMap.put("friendLink.url", systemConfigVO.getFriendLinkUrl());
         configMap.put("friendLink.email", systemConfigVO.getFriendLinkEmail());
-        configMap.put("swagger.contact.name", systemConfigVO.getSwaggerContactName());
-        configMap.put("swagger.contact.email", systemConfigVO.getSwaggerContactEmail());
-        configMap.put("swagger.termsOfServiceUrl", systemConfigVO.getSwaggerTermsOfServiceUrl());
-        configMap.put("swagger.termsOfServiceUrlapi", systemConfigVO.getSwaggerTermsOfServiceUrlapi());
         configMap.put("search.mode", systemConfigVO.getSearchMode());
         configMap.put("upload.mode", systemConfigVO.getUploadMode());
         configMap.put("upload.oss.url", systemConfigVO.getUploadOssUrl());

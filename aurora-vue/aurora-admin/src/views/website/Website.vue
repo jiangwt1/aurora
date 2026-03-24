@@ -233,18 +233,6 @@
           <el-form-item label="友链审核邮箱">
             <el-input v-model="systemConfigForm.friendLinkEmail" size="small" style="width: 400px" />
           </el-form-item>
-          <el-form-item label="Swagger联系人">
-            <el-input v-model="systemConfigForm.swaggerContactName" size="small" style="width: 400px" />
-          </el-form-item>
-          <el-form-item label="Swagger邮箱">
-            <el-input v-model="systemConfigForm.swaggerContactEmail" size="small" style="width: 400px" />
-          </el-form-item>
-          <el-form-item label="Swagger服务条款">
-            <el-input v-model="systemConfigForm.swaggerTermsOfServiceUrl" size="small" style="width: 400px" />
-          </el-form-item>
-          <el-form-item label="Swagger API URL">
-            <el-input v-model="systemConfigForm.swaggerTermsOfServiceUrlapi" size="small" style="width: 400px" />
-          </el-form-item>
           <el-form-item label="搜索模式">
             <el-radio-group v-model="systemConfigForm.searchMode">
               <el-radio label="mysql">MySQL</el-radio>

@@ -291,18 +291,6 @@
             <n-form-item label="友链审核邮箱" path="friendLinkEmail">
               <n-input v-model:value="systemConfig.friendLinkEmail" placeholder="请输入友链审核邮箱" style="width: 400px" />
             </n-form-item>
-            <n-form-item label="Swagger联系人" path="swaggerContactName">
-              <n-input v-model:value="systemConfig.swaggerContactName" placeholder="请输入Swagger联系人" style="width: 400px" />
-            </n-form-item>
-            <n-form-item label="Swagger邮箱" path="swaggerContactEmail">
-              <n-input v-model:value="systemConfig.swaggerContactEmail" placeholder="请输入Swagger邮箱" style="width: 400px" />
-            </n-form-item>
-            <n-form-item label="Swagger服务条款" path="swaggerTermsOfServiceUrl">
-              <n-input v-model:value="systemConfig.swaggerTermsOfServiceUrl" placeholder="请输入Swagger服务条款URL" style="width: 400px" />
-            </n-form-item>
-            <n-form-item label="Swagger API URL" path="swaggerTermsOfServiceUrlapi">
-              <n-input v-model:value="systemConfig.swaggerTermsOfServiceUrlapi" placeholder="请输入Swagger API URL" style="width: 400px" />
-            </n-form-item>
             <n-form-item label="搜索模式" path="searchMode">
               <n-radio-group v-model:value="systemConfig.searchMode">
                 <n-radio value="mysql">MySQL</n-radio>
@@ -457,10 +445,6 @@ const systemConfig = reactive({
   websiteMessage: '',
   friendLinkUrl: '',
   friendLinkEmail: '',
-  swaggerContactName: '',
-  swaggerContactEmail: '',
-  swaggerTermsOfServiceUrl: '',
-  swaggerTermsOfServiceUrlapi: '',
   searchMode: 'mysql',
   uploadMode: 'local',
   uploadOssUrl: '',

@@ -29,18 +29,6 @@ public class SystemConfigVO {
     @ApiModelProperty(name = "friendLinkEmail", value = "友链邮箱", dataType = "String")
     private String friendLinkEmail;
 
-    @ApiModelProperty(name = "swaggerContactName", value = "Swagger联系人", dataType = "String")
-    private String swaggerContactName;
-
-    @ApiModelProperty(name = "swaggerContactEmail", value = "Swagger邮箱", dataType = "String")
-    private String swaggerContactEmail;
-
-    @ApiModelProperty(name = "swaggerTermsOfServiceUrl", value = "Swagger服务条款URL", dataType = "String")
-    private String swaggerTermsOfServiceUrl;
-
-    @ApiModelProperty(name = "swaggerTermsOfServiceUrlapi", value = "Swagger API URL", dataType = "String")
-    private String swaggerTermsOfServiceUrlapi;
-
     @ApiModelProperty(name = "searchMode", value = "搜索模式", dataType = "String")
     private String searchMode;
 
