@@ -585,6 +585,7 @@ function handleSaveWebsiteConfig() {
   }
   updateWebsiteConfigApi(data).then(() => {
     message.success('保存网站配置成功')
+    fetchWebsiteConfig()
   }).catch(err => {
     console.error('保存配置失败:', err)
     message.error('保存配置失败')
@@ -592,8 +593,15 @@ function handleSaveWebsiteConfig() {
 }
 
 function handleSaveSocialConfig() {
-  updateWebsiteConfigApi({ ...websiteConfig, ...socialConfig }).then(() => {
+  const data = { ...websiteConfig, ...socialConfig }
+  // 将时间戳转换为日期字符串
+  if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
+    const date = new Date(data.websiteCreateTime)
+    data.websiteCreateTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+  updateWebsiteConfigApi(data).then(() => {
     message.success('保存社交配置成功')
+    fetchWebsiteConfig()
   }).catch(err => {
     console.error('保存配置失败:', err)
     message.error('保存配置失败')
@@ -601,8 +609,15 @@ function handleSaveSocialConfig() {
 }
 
 function handleSaveOtherConfig() {
-  updateWebsiteConfigApi({ ...websiteConfig, ...otherConfig }).then(() => {
+  const data = { ...websiteConfig, ...otherConfig }
+  // 将时间戳转换为日期字符串
+  if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
+    const date = new Date(data.websiteCreateTime)
+    data.websiteCreateTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+  updateWebsiteConfigApi(data).then(() => {
     message.success('保存其他配置成功')
+    fetchWebsiteConfig()
   }).catch(err => {
     console.error('保存配置失败:', err)
     message.error('保存配置失败')
