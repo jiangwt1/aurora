@@ -1,6 +1,6 @@
 package com.aurora.strategy.impl;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import com.aurora.config.properties.QQConfigProperties;
 import com.aurora.constant.SocialLoginConstant;
 import com.aurora.model.dto.QQTokenDTO;

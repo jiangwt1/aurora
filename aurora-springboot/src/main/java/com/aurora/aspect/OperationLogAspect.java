@@ -1,6 +1,6 @@
 package com.aurora.aspect;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import com.aurora.annotation.OptLog;
 import com.aurora.entity.OperationLog;
 import com.aurora.event.OperationLogEvent;

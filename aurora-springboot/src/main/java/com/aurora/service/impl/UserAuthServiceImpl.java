@@ -1,6 +1,6 @@
 package com.aurora.service.impl;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import com.aurora.constant.CommonConstant;
 import com.aurora.model.dto.*;
 import com.aurora.entity.UserAuth;

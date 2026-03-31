@@ -1,6 +1,6 @@
 package com.aurora.handler;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import com.aurora.constant.CommonConstant;
 import com.aurora.model.vo.ResultVO;
 import org.springframework.security.access.AccessDeniedException;

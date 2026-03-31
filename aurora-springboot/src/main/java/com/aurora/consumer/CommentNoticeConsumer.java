@@ -1,6 +1,6 @@
 package com.aurora.consumer;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson.JSON;
 import com.aurora.model.dto.EmailDTO;
 import com.aurora.util.EmailUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
