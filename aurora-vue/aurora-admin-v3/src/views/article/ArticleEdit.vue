@@ -41,7 +41,7 @@
     </n-card>
 
     <!-- 发布文章对话框 -->
-    <n-modal v-model:show="showPublishModal" preset="card" title="发布文章" style="width: 700px" :z-index="10000">
+    <n-modal v-model:show="showPublishModal" preset="card" title="发布文章" style="width: 700px">
       <n-form ref="formRef" :model="article" label-width="100px" label-placement="left">
         <!-- 文章分类 -->
         <n-form-item path="categoryName">
@@ -406,8 +406,7 @@ async function handleUploadImg(files, callback) {
 
   try {
     const urls = await Promise.all(uploadPromises)
-    const validUrls = urls.filter(url => url !== null)
-    callback(validUrls)
+    callback(urls.map(url => url || ''))
   } catch (error) {
     console.error('上传图片失败:', error)
   }
