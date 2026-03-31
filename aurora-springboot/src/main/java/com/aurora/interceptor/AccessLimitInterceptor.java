@@ -39,7 +39,6 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                 String key = IpUtil.getIpAddress(httpServletRequest) + "-" + handlerMethod.getMethod().getName();
                 try {
                     long q = redisService.incrExpire(key, seconds);
-                    log.info(key + "请求第" + q + "次");
                     if (q > maxCount) {
                         render(httpServletResponse, ResultVO.fail("请求过于频繁，" + seconds + "秒后再试"));
                         log.warn(key + "请求次数超过每" + seconds + "秒" + maxCount + "次");
@@ -47,13 +46,8 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
                     }
                     return true;
                 } catch (RedisConnectionFailureException e) {
-                    // Redis故障时降级处理：允许请求通过，避免影响正常用户
-                    log.error("Redis连接失败，跳过访问限制检查: " + e.getMessage());
-                    return true;
-                } catch (Exception e) {
-                    // 其他异常也降级处理
-                    log.error("访问限制检查异常: " + e.getMessage(), e);
-                    return true;
+                    log.warn("redis错误: " + e.getMessage());
+                    return false;
                 }
             }
         }
