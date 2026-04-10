@@ -103,10 +103,9 @@
 import { ref, reactive, onMounted, h } from 'vue'
 import { useRouter } from 'vue-router'
 import { NButton, NTag, NImage, NSpace, NPopconfirm, NSwitch, NPagination, useMessage, useDialog } from 'naive-ui'
-import { getArticlesApi, deleteArticleApi, exportArticlesApi } from '@/api/article'
+import { getArticlesApi, deleteArticleApi, exportArticlesApi, updateArticleTopAndFeaturedApi } from '@/api/article'
 import { searchCategoriesApi } from '@/api/category'
 import { searchTagsApi } from '@/api/tag'
-import { request } from '@/utils/http'
 import dayjs from 'dayjs'
 
 function formatDateTime(dateStr) {
@@ -440,9 +439,10 @@ const handleEdit = (row) => {
 // 切换置顶
 const handleToggleTop = async (row, value) => {
   try {
-    await request.put('/api/admin/articles/top', {
-      articleId: row.id,
-      isTop: value ? 1 : 0
+    await updateArticleTopAndFeaturedApi({
+      id: row.id,
+      isTop: value ? 1 : 0,
+      isFeatured: row.isFeatured
     })
     row.isTop = value ? 1 : 0
     message.success(value ? '置顶成功' : '取消置顶成功')
@@ -454,8 +454,9 @@ const handleToggleTop = async (row, value) => {
 // 切换推荐
 const handleToggleFeatured = async (row, value) => {
   try {
-    await request.put('/api/admin/articles/featured', {
-      articleId: row.id,
+    await updateArticleTopAndFeaturedApi({
+      id: row.id,
+      isTop: row.isTop,
       isFeatured: value ? 1 : 0
     })
     row.isFeatured = value ? 1 : 0

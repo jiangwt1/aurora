@@ -30,6 +30,9 @@ export const uploadArticleImageApi = (formData) => request.post('/api/admin/arti
   headers: { 'Content-Type': 'multipart/form-data' }
 })
 
+// 修改文章置顶和推荐
+export const updateArticleTopAndFeaturedApi = (data) => request.put('/api/admin/articles/topAndFeatured', data)
+
 // 搜索文章
 export const searchArticlesApi = (params) => request.get('/api/admin/articles/search', { params })
 
