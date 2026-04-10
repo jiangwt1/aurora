@@ -33,6 +33,7 @@
             :theme="theme"
             :preview-theme="previewTheme"
             :code-theme="codeTheme"
+            :toolbarsExclude="['github', 'save']"
             @onUploadImg="handleUploadImg"
             style="height: 100%"
           />

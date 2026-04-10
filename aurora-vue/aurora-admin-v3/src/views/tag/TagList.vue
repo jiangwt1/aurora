@@ -39,9 +39,6 @@
         <n-form-item label="标签名称" path="tagName">
           <n-input v-model:value="form.tagName" placeholder="请输入标签名称" />
         </n-form-item>
-        <n-form-item label="颜色" path="color">
-          <n-color-picker v-model:value="form.color" />
-        </n-form-item>
       </n-form>
       <template #action>
         <n-space>
@@ -101,9 +98,7 @@ const columns = [
     title: '标签名称',
     key: 'tagName',
     render: (row) => {
-      return h(NTag, {
-        color: { color: row.color, borderColor: row.color }
-      }, { default: () => row.tagName })
+      return h(NTag, null, { default: () => row.tagName })
     }
   },
   {
