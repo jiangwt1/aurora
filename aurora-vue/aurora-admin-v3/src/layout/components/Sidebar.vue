@@ -95,6 +95,9 @@ const fetchMenus = async () => {
       const result = []
 
       for (const item of items) {
+        // 跳过隐藏菜单
+        if (item.isHidden === 1) continue
+
         // 如果有子菜单，递归处理
         if (item.children && item.children.length > 0) {
           // 构建当前项的完整路径
