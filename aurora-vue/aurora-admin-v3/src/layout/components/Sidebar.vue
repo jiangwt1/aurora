@@ -162,6 +162,19 @@ const fetchMenus = async () => {
       return result
     }
 
+    // 检查原始数据中某项是否被隐藏（递归）
+    const isItemHidden = (items, matchFn) => {
+      for (const item of items) {
+        if (matchFn(item) && item.hidden === true) return true
+        if (item.children && isItemHidden(item.children, matchFn)) return true
+      }
+      return false
+    }
+
+    const isHomePageHidden = isItemHidden(res.data || [], (item) =>
+      item.path === '/' || item.name === '首页' || item.name === '工作台'
+    )
+
     // 处理菜单数据
     let menus = flattenMenuItems(res.data || [])
 
@@ -178,18 +191,19 @@ const fetchMenus = async () => {
 
     menus = uniqueMenus
 
-    // 检查是否有首页
-    const hasHomePage = menus.some(item =>
-      item.key === '/' || item.key === '/home' || item.label === '首页' || item.label === '工作台'
-    )
+    // 检查是否有首页（仅当首页未被主动隐藏时才自动补充）
+    if (!isHomePageHidden) {
+      const hasHomePage = menus.some(item =>
+        item.key === '/' || item.key === '/home' || item.label === '首页' || item.label === '工作台'
+      )
 
-    // 如果没有首页，才添加
-    if (!hasHomePage) {
-      menus.unshift({
-        label: '首页',
-        key: '/home',
-        icon: iconMap.home
-      })
+      if (!hasHomePage) {
+        menus.unshift({
+          label: '首页',
+          key: '/home',
+          icon: iconMap.home
+        })
+      }
     }
 
     // 检查是否有文章列表和发布文章菜单
