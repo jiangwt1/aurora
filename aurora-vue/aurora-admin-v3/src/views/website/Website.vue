@@ -380,7 +380,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { AddOutline } from '@vicons/ionicons5'
-import { getWebsiteConfigApi, updateWebsiteConfigApi, uploadConfigImageApi } from '@/api/website'
+import { getWebsiteConfigApi, updateWebsiteConfigApi } from '@/api/website'
 import { getSystemConfigApi, updateSystemConfigApi } from '@/api/system'
 
 const message = useMessage()
@@ -513,71 +513,99 @@ function handleBeforeUpload(data) {
   return true
 }
 
-function handleAuthorAvatarFinish({ file }) {
-  if (file.response && file.response.code === 200) {
-    websiteConfig.authorAvatar = file.response.data
-    message.success('作者头像上传成功')
+function getUploadResponse(file, event) {
+  if (!file && !event) return null
+
+  const xhrTarget = event?.target || event?.currentTarget
+  const rawResponse = xhrTarget?.response ?? xhrTarget?.responseText ?? file?.response
+  if (!rawResponse) return null
+
+  if (typeof rawResponse === 'string') {
+    try {
+      return JSON.parse(rawResponse)
+    } catch (error) {
+      console.error('解析上传响应失败:', error)
+      return null
+    }
   }
+
+  return rawResponse
 }
 
-function handleLogoFinish({ file }) {
-  if (file.response && file.response.code === 200) {
-    websiteConfig.logo = file.response.data
-    message.success('logo上传成功')
+function getUploadedImageUrl(file, event, fallback = '') {
+  const response = getUploadResponse(file, event)
+  if ((response?.flag || response?.code === 200) && response?.data) {
+    return response.data
   }
+
+  const fileUrl = [file?.fileUrl, file?.url].find((url) => (
+    typeof url === 'string' &&
+    url &&
+    !url.startsWith('blob:')
+  ))
+
+  const safeFallback = typeof fallback === 'string' && !fallback.startsWith('blob:')
+    ? fallback
+    : ''
+
+  return fileUrl || safeFallback
 }
 
-function handleFaviconFinish({ file }) {
-  if (file.response && file.response.code === 200) {
-    websiteConfig.favicon = file.response.data
-    message.success('favicon上传成功')
-  }
+function hasBlobUrl(value) {
+  return typeof value === 'string' && value.startsWith('blob:')
 }
 
-// 简化版本，实际上可能需要更复杂的处理
-function handleAuthorAvatarSuccess({ file }) {
-  // 这里模拟，实际应该从响应中获取URL
-  websiteConfig.authorAvatar = file.fileUrl || URL.createObjectURL(file.file)
+function validateImageUrls(data, fields) {
+  const invalidField = fields.find((field) => hasBlobUrl(data[field]))
+  if (!invalidField) return true
+
+  message.error('检测到临时图片地址，请重新上传对应图片后再保存')
+  return false
+}
+
+function handleAuthorAvatarSuccess({ file, event }) {
+  websiteConfig.authorAvatar = getUploadedImageUrl(file, event, websiteConfig.authorAvatar)
   message.success('作者头像上传成功')
 }
 
-function handleLogoSuccess({ file }) {
-  websiteConfig.logo = file.fileUrl || URL.createObjectURL(file.file)
+function handleLogoSuccess({ file, event }) {
+  websiteConfig.logo = getUploadedImageUrl(file, event, websiteConfig.logo)
   message.success('logo上传成功')
 }
 
-function handleFaviconSuccess({ file }) {
-  websiteConfig.favicon = file.fileUrl || URL.createObjectURL(file.file)
+function handleFaviconSuccess({ file, event }) {
+  websiteConfig.favicon = getUploadedImageUrl(file, event, websiteConfig.favicon)
   message.success('favicon上传成功')
 }
 
-function handleUserAvatarSuccess({ file }) {
-  otherConfig.userAvatar = file.fileUrl || URL.createObjectURL(file.file)
+function handleUserAvatarSuccess({ file, event }) {
+  otherConfig.userAvatar = getUploadedImageUrl(file, event, otherConfig.userAvatar)
   message.success('用户头像上传成功')
 }
 
-function handleTouristAvatarSuccess({ file }) {
-  otherConfig.touristAvatar = file.fileUrl || URL.createObjectURL(file.file)
+function handleTouristAvatarSuccess({ file, event }) {
+  otherConfig.touristAvatar = getUploadedImageUrl(file, event, otherConfig.touristAvatar)
   message.success('游客头像上传成功')
 }
 
-function handleWeiXinSuccess({ file }) {
-  otherConfig.weiXinQRCode = file.fileUrl || URL.createObjectURL(file.file)
+function handleWeiXinSuccess({ file, event }) {
+  otherConfig.weiXinQRCode = getUploadedImageUrl(file, event, otherConfig.weiXinQRCode)
   message.success('微信收款码上传成功')
 }
 
-function handleAlipaySuccess({ file }) {
-  otherConfig.alipayQRCode = file.fileUrl || URL.createObjectURL(file.file)
+function handleAlipaySuccess({ file, event }) {
+  otherConfig.alipayQRCode = getUploadedImageUrl(file, event, otherConfig.alipayQRCode)
   message.success('支付宝收款码上传成功')
 }
 
-function handleLoginBgSuccess({ file }) {
-  systemConfig.loginBackgroundImage = file.fileUrl || URL.createObjectURL(file.file)
+function handleLoginBgSuccess({ file, event }) {
+  systemConfig.loginBackgroundImage = getUploadedImageUrl(file, event, systemConfig.loginBackgroundImage)
   message.success('登录背景上传成功')
 }
 
 function handleSaveWebsiteConfig() {
   const data = { ...websiteConfig }
+  if (!validateImageUrls(data, ['authorAvatar', 'logo', 'favicon'])) return
   // 将时间戳转换为日期字符串
   if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
     const date = new Date(data.websiteCreateTime)
@@ -594,6 +622,7 @@ function handleSaveWebsiteConfig() {
 
 function handleSaveSocialConfig() {
   const data = { ...websiteConfig, ...socialConfig }
+  if (!validateImageUrls(data, ['authorAvatar', 'logo', 'favicon'])) return
   // 将时间戳转换为日期字符串
   if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
     const date = new Date(data.websiteCreateTime)
@@ -610,6 +639,7 @@ function handleSaveSocialConfig() {
 
 function handleSaveOtherConfig() {
   const data = { ...websiteConfig, ...otherConfig }
+  if (!validateImageUrls(data, ['authorAvatar', 'logo', 'favicon', 'userAvatar', 'touristAvatar', 'weiXinQRCode', 'alipayQRCode'])) return
   // 将时间戳转换为日期字符串
   if (data.websiteCreateTime && typeof data.websiteCreateTime === 'number') {
     const date = new Date(data.websiteCreateTime)
@@ -625,6 +655,7 @@ function handleSaveOtherConfig() {
 }
 
 function handleSaveSystemConfig() {
+  if (!validateImageUrls(systemConfig, ['loginBackgroundImage'])) return
   updateSystemConfigApi(systemConfig).then(() => {
     message.success('保存系统配置成功')
   }).catch(err => {
