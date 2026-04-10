@@ -80,6 +80,12 @@ import { ref, reactive, h, onMounted } from 'vue'
 import { NButton, NSpace, NSwitch, NIcon, NTag, useMessage } from 'naive-ui'
 import { AddOutline } from '@vicons/ionicons5'
 import { getMenusApi, saveMenuApi, deleteMenuApi, updateMenuHiddenApi } from '@/api/menu'
+import dayjs from 'dayjs'
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '-'
+  return dayjs(dateStr).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const message = useMessage()
 
@@ -157,7 +163,8 @@ const columns = [
   {
     title: '创建时间',
     key: 'createTime',
-    width: 180
+    width: 180,
+    render: (row) => formatDateTime(row.createTime)
   },
   {
     title: '操作',
@@ -173,6 +180,10 @@ const columns = [
             size: 'small',
             onClick: () => handleAdd(row, 1)
           }, { default: () => '新增' })
+        )
+      } else {
+        actions.push(
+          h('div', { style: 'width: 40px; display: inline-block' })
         )
       }
 
