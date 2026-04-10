@@ -81,7 +81,13 @@
 import { ref, reactive, h, onMounted } from 'vue'
 import { NButton, NSpace, NTag, NSwitch, NPopconfirm, useMessage } from 'naive-ui'
 import { AddOutline } from '@vicons/ionicons5'
-import { getResourcesApi, saveResourceApi, deleteResourceApi, changeResourceAnonymousApi } from '@/api/resource'
+import { getResourcesApi, saveResourceApi, deleteResourceApi } from '@/api/resource'
+import dayjs from 'dayjs'
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '-'
+  return dayjs(dateStr).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const message = useMessage()
 
@@ -168,7 +174,9 @@ const columns = [
     render: (row) => {
       if (!row.url) return null
       return h(NSwitch, {
-        value: row.isAnonymous === 1,
+        value: row.isAnonymous,
+        checkedValue: 1,
+        uncheckedValue: 0,
         onUpdateValue: (val) => handleChangeAnonymous(row, val)
       })
     }
@@ -176,7 +184,8 @@ const columns = [
   {
     title: '创建时间',
     key: 'createTime',
-    width: 160
+    width: 180,
+    render: (row) => formatDateTime(row.createTime)
   },
   {
     title: '操作',
@@ -334,13 +343,11 @@ function handleDelete(id) {
 }
 
 function handleChangeAnonymous(row, value) {
-  changeResourceAnonymousApi({
-    id: row.id,
-    isAnonymous: value ? 1 : 0
-  }).then(() => {
+  row.isAnonymous = value
+  saveResourceApi(row).then(() => {
     message.success('修改成功')
-    fetchResources()
   }).catch(err => {
+    row.isAnonymous = value === 1 ? 0 : 1
     console.error('修改失败:', err)
     message.error('修改失败')
   })

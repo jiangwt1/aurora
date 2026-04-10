@@ -183,7 +183,10 @@ const columns = [
         )
       } else {
         actions.push(
-          h('div', { style: 'width: 40px; display: inline-block' })
+          h(NButton, {
+            size: 'small',
+            style: { visibility: 'hidden' }
+          }, { default: () => '新增' })
         )
       }
 

@@ -18,7 +18,7 @@ export const saveMenuApi = (data) => request.post('/api/admin/menus', data)
 export const deleteMenuApi = (id) => request.delete(`/api/admin/menus/${id}`)
 
 // 更新菜单隐藏状态
-export const updateMenuHiddenApi = (data) => request.put('/api/admin/menus/hidden', data)
+export const updateMenuHiddenApi = (data) => request.put('/api/admin/menus/isHidden', data)
 
 // 更新菜单排序
 export const updateMenuSortApi = (data) => request.put('/api/admin/menus/sort', data)
