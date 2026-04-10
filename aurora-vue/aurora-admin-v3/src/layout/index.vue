@@ -49,7 +49,10 @@ onMounted(() => {
 
 .main-content {
   margin-left: 210px;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: #f5f6fb;
   transition: margin-left 0.3s;
 }

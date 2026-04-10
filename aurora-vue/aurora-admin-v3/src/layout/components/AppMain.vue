@@ -206,15 +206,20 @@ onMounted(() => {
 .app-main-container {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  overflow: hidden;
   background: #f5f6fb;
 }
 
 .app-main-container :deep(.n-tabs) {
   padding: 8px 16px 0;
   background: #fff;
+  flex-shrink: 0;
 }
 
 .content-container {
+  flex: 1;
+  overflow-y: auto;
   padding: 16px;
 }
 

@@ -195,15 +195,13 @@ onBeforeUnmount(() => {
 }
 
 .navbar-header {
-  position: sticky;
-  top: 0;
-  z-index: 99;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
   padding: 0 20px;
   background: #fff;
+  flex-shrink: 0;
 }
 
 .navbar-left {
