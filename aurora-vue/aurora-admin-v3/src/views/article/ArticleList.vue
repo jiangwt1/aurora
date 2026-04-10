@@ -294,7 +294,6 @@ const fetchArticles = async () => {
     const res = await getArticlesApi(params)
     articles.value = res.data.records || []
     pagination.itemCount = res.data.count || res.data.total || 0
-    pagination.page = res.data.current || 1
   } catch (error) {
     console.error('获取文章列表失败:', error)
     message.error('获取文章列表失败')
