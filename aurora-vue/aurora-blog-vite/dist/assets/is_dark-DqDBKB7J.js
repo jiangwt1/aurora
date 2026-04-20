@@ -1,0 +1,1 @@
+import{C as e,S as t}from"./mermaid-ae477ddf-BWeS9xof.js";var n=n=>{let{r,g:i,b:a}=t.parse(n),o=.2126*e.channel.toLinear(r)+.7152*e.channel.toLinear(i)+.0722*e.channel.toLinear(a);return e.lang.round(o)},r=e=>n(e)>=.5,i=e=>!r(e);export{i as t};
