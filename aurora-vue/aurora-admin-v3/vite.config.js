@@ -12,11 +12,6 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
   const { VITE_PORT, VITE_BASE_URL, VITE_PUBLIC_PATH } = env
 
-  console.log('=== Vite 配置 ===')
-  console.log('模式:', mode)
-  console.log('BASE_URL:', VITE_BASE_URL)
-  console.log('代理目标:', VITE_BASE_URL)
-
   return {
     base: VITE_PUBLIC_PATH || '/',
     plugins: [
@@ -64,8 +59,7 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     server: {
-      host: '0.0.0.0',
-      port: Number(VITE_PORT) || 8080,
+      port: Number(VITE_PORT) || 81,
       open: false,
       hmr: {
         // 热更新时不自动刷新页面
