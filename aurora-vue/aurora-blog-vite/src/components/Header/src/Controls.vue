@@ -242,16 +242,38 @@ export default defineComponent({
       params.append('password', loginInfo.password)
       api.login(params).then(({ data }) => {
         if (data.flag) {
+          // 设置用户信息到store
           userStore.userInfo = data.data
-          sessionStorage.setItem('token', data.data.token)
           userStore.token = data.data.token
+          sessionStorage.setItem('token', data.data.token)
+
+          // 显示成功通知
           proxy.$notify({
             title: 'Success',
             message: '登录成功',
             type: 'success'
           })
+
+          // 关闭登录弹窗
           reactiveDate.loginDialogVisible = false
+
+          // 清除密码输入
+          loginInfo.password = ''
+        } else {
+          // 登录失败显示错误信息
+          proxy.$notify({
+            title: 'Error',
+            message: data.message || '登录失败',
+            type: 'error'
+          })
         }
+      }).catch((error) => {
+        console.error('登录请求失败:', error)
+        proxy.$notify({
+          title: 'Error',
+          message: error.response?.data?.message || '登录请求失败，请检查网络',
+          type: 'error'
+        })
       })
     }
     const logout = () => {

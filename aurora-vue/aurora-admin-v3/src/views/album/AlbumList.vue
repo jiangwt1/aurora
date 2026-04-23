@@ -255,14 +255,22 @@ function handleUploadCover({ file }) {
   formData.append('file', file.file)
 
   uploadAlbumCoverApi(formData).then(res => {
-    albumForm.value.albumCover = res.data
-    message.success('上传封面成功')
+    // 兼容不同的返回格式
+    let coverUrl = ''
+    if (res.flag) {
+      coverUrl = res.data?.url || res.data?.src || res.data?.coverUrl || res.data
+    }
+
+    if (coverUrl) {
+      albumForm.value.albumCover = coverUrl
+      message.success('上传封面成功')
+    } else {
+      message.error('上传封面失败：未获取到图片地址')
+    }
   }).catch(err => {
     console.error('上传封面失败:', err)
     message.error('上传封面失败')
   })
-
-  return false // 阻止自动上传
 }
 
 function handlePageChange(page) {

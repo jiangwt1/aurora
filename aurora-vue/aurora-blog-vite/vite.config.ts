@@ -28,9 +28,12 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    hmr: {
+      overlay: true
+    },
     proxy: {
       '/api': {
-        target: 'https://gysy.ltd/api/',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, '')
       }

@@ -67,6 +67,10 @@ export default defineConfig(({ command, mode }) => {
       host: '0.0.0.0',
       port: Number(VITE_PORT) || 8080,
       open: false,
+      hmr: {
+        // 热更新时不自动刷新页面
+        overlay: true
+      },
       proxy: {
         '/api': {
           target: VITE_BASE_URL || 'http://127.0.0.1:8080',

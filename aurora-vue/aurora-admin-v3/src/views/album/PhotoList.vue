@@ -204,18 +204,25 @@ function handleUploadRequest({ file, onFinish, onError }) {
   formData.append('file', file.file)
 
   uploadPhotoApi(formData).then(res => {
+    // 根据后端返回格式处理
+    let photoUrl = ''
     if (res.flag) {
+      // 兼容不同的返回格式
+      photoUrl = res.data?.url || res.data?.src || res.data?.photoUrl || res.data
+    }
+
+    if (photoUrl) {
       // 添加到上传列表
       uploadList.value.push({
         id: Date.now() + Math.random(), // 临时ID
         file: file,
-        url: res.data, // 上传成功返回的URL
+        url: photoUrl,
         name: file.name
       })
       message.success(`上传 ${file.name} 成功`)
       onFinish()
     } else {
-      message.error(`上传 ${file.name} 失败`)
+      message.error(`上传 ${file.name} 失败：未获取到图片地址`)
       onError()
     }
   }).catch(err => {

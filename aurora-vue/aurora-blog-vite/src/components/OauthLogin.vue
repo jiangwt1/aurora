@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from 'vue'
+import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useUserStore } from '@/stores/user'
@@ -22,34 +22,92 @@ export default defineComponent({
     const userStore = useUserStore()
     const route = useRoute()
     const router = useRouter()
-    if (route.path === '/oauth/login/qq') {
-      //@ts-ignore
-      if (QC.Login.check()) {
-        //@ts-ignore
-        QC.Login.getMe(function (openId, accessToken) {
-          let params = {
-            openId: openId,
-            accessToken: accessToken
-          }
-          api.qqLogin(params).then(({ data }) => {
-            if (data.flag) {
-              userStore.userInfo = data.data
-              userStore.token = data.data.token
-              sessionStorage.setItem('token', data.data.token)
-              proxy.$notify({
-                title: 'Success',
-                message: '登录成功',
-                type: 'success'
+    const isLoading = ref(true)
+
+    const handleQQLogin = async () => {
+      try {
+        if (route.path === '/oauth/login/qq') {
+          // @ts-ignore
+          if (QC.Login.check()) {
+            // @ts-ignore
+            QC.Login.getMe(function (openId, accessToken) {
+              const params = {
+                openId: openId,
+                accessToken: accessToken
+              }
+              api.qqLogin(params).then(({ data }) => {
+                if (data.flag) {
+                  // 正确设置用户信息到 store
+                  userStore.userInfo = data.data
+                  userStore.token = data.data.token
+                  userStore.userVisible = false
+                  sessionStorage.setItem('token', data.data.token)
+
+                  // 显示成功通知
+                  proxy.$notify({
+                    title: 'Success',
+                    message: '登录成功',
+                    type: 'success'
+                  })
+
+                  // 延迟跳转，让用户看到成功提示
+                  setTimeout(() => {
+                    isLoading.value = false
+                    if (userStore.currentUrl === '' || userStore.currentUrl === '/oauth/login/qq') {
+                      router.push({ path: '/' })
+                    } else {
+                      router.push({ path: userStore.currentUrl })
+                    }
+                  }, 800)
+                } else {
+                  proxy.$notify({
+                    title: 'Error',
+                    message: data.message || '登录失败',
+                    type: 'error'
+                  })
+                  setTimeout(() => {
+                    router.push({ path: '/' })
+                  }, 1500)
+                }
+              }).catch((err) => {
+                console.error('QQ登录失败:', err)
+                proxy.$notify({
+                  title: 'Error',
+                  message: '登录失败，请重试',
+                  type: 'error'
+                })
+                setTimeout(() => {
+                  router.push({ path: '/' })
+                }, 1500)
               })
-            }
-          })
-          if (userStore.currentUrl === '') {
-            router.push({ path: '/' })
+            })
           } else {
-            router.push({ path: userStore.currentUrl })
+            // QQ登录未授权
+            proxy.$notify({
+              title: 'Warning',
+              message: '请先授权QQ登录',
+              type: 'warning'
+            })
+            setTimeout(() => {
+              router.push({ path: '/' })
+            }, 1500)
           }
-        })
+        }
+      } catch (error) {
+        console.error('登录处理失败:', error)
+        router.push({ path: '/' })
       }
+    }
+
+    onMounted(() => {
+      // 等待QQ SDK加载完成后执行
+      setTimeout(() => {
+        handleQQLogin()
+      }, 500)
+    })
+
+    return {
+      isLoading
     }
   }
 })

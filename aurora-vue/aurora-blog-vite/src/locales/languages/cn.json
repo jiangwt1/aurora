@@ -6,11 +6,11 @@
     "categories": "分类",
     "tags": "标签",
     "post": "文章",
-    "talks":"说说",
+    "talks": "说说",
+    "search": "搜索结果",
     "message": "留言",
     "friends": "朋友们",
     "album": "相册",
-    "search": "搜索结果",
     "not-found": "无法找到页面"
   },
   "home": {
@@ -18,7 +18,7 @@
   },
   "titles": {
     "articles": "文章列表",
-    "talks":"说说",
+    "talks": "说说",
     "about": "关于",
     "category_list": "分类目录",
     "tag_list": "标签目录",
@@ -29,7 +29,7 @@
     "recent_comment": "最近评论",
     "website_info": "网站信息",
     "tips": "鼓励一下",
-    "notice":"公告"
+    "notice": "公告"
   },
   "settings": {
     "months": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -67,10 +67,10 @@
     "empty-tag": "目前没有标签",
     "pinned": "置顶",
     "featured": "推荐",
-    "login":"登录",
-    "logout":"登出",
-    "personal-center":"个人中心",
-    "running-time":"运行时间",
-    "view-count":"总访问量"
+    "login": "登录",
+    "logout": "登出",
+    "personal-center": "个人中心",
+    "running-time": "运行时间",
+    "view-count": "总访问量"
   }
 }

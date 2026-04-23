@@ -126,13 +126,13 @@ export default defineComponent({
       window.addEventListener('resize', resizeHander)
     }
     const initWindowOnload = () => {
-      window.onload = () => {
+      window.addEventListener('load', () => {
         setTimeout(() => {
           window.scrollTo({
             top: 0
           })
         }, 10)
-      }
+      })
     }
     const initFavicon = (faviconUrl: string) => {
       if (!faviconUrl) {

@@ -235,6 +235,7 @@ const tagName = ref('')
 const categoryList = ref([])
 const tagList = ref([])
 const autoSave = ref(true)
+const dataLoaded = ref(false)
 
 // 过滤后的分类列表（根据输入内容过滤）
 const filteredCategoryList = computed(() => {
@@ -310,12 +311,29 @@ async function fetchArticle() {
         console.error('解析草稿失败:', e)
       }
     }
+    dataLoaded.value = true
     return
   }
 
   try {
     const res = await request.get('/api/admin/articles/' + articleId)
-    Object.assign(article, res.data)
+    // 只覆盖存在的字段，避免覆盖整个对象
+    if (res.data) {
+      article.id = res.data.id
+      article.articleTitle = res.data.articleTitle || article.articleTitle
+      article.articleContent = res.data.articleContent ?? article.articleContent
+      article.articleAbstract = res.data.articleAbstract ?? article.articleAbstract
+      article.articleCover = res.data.articleCover ?? article.articleCover
+      article.categoryName = res.data.categoryName ?? article.categoryName
+      article.tagNames = res.data.tagNames || []
+      article.isTop = res.data.isTop ?? 0
+      article.isFeatured = res.data.isFeatured ?? 0
+      article.type = res.data.type ?? 1
+      article.status = res.data.status ?? 1
+      article.originalUrl = res.data.originalUrl ?? ''
+      article.password = res.data.password ?? ''
+      dataLoaded.value = true
+    }
   } catch (error) {
     message.error('获取文章失败')
   }
@@ -532,14 +550,15 @@ async function saveArticle() {
 function autoSaveArticle() {
   if (
     autoSave.value &&
+    dataLoaded.value &&
     article.articleTitle?.trim() &&
     article.articleContent?.trim()
   ) {
     if (article.id) {
-      // 已发布的文章，自动保存到服务器
-      saveArticle()
+      // 已发布的文章，不再自动保存到服务器
+      // 只有用户手动点击保存按钮才会保存
     } else {
-      // 新文章，保存到sessionStorage
+      // 新文章，保存到sessionStorage作为草稿
       sessionStorage.setItem('article', JSON.stringify(article))
     }
   }

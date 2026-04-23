@@ -6,19 +6,19 @@
     "categories": "Categories",
     "tags": "Tags",
     "post": "Article",
-    "talks":"talks",
+    "talks": "Talks",
     "search": "Search results",
     "message": "Message",
     "friends": "Friends",
-    "album": "Ablum",
+    "album": "Album",
     "not-found": "Page not found"
   },
   "home": {
-    "recommended": "Feature Articles"
+    "recommended": "Featured Articles"
   },
   "titles": {
     "articles": "Articles",
-    "talks":"talks",
+    "talks": "Talks",
     "about": "About",
     "category_list": "Categories",
     "tag_list": "Tags",
@@ -29,17 +29,17 @@
     "recent_comment": "Recent Comments",
     "website_info": "Website Info",
     "tips": "Tips and Gifts",
-    "notice":"Notice"
+    "notice": "Notice"
   },
   "settings": {
     "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     "articles": "Articles",
-    "talks": "talks",
+    "talks": "Talks",
     "categories": "Categories",
     "tags": "Tags",
     "words": "Words",
-    "visitor_count": "Total visitor count",
-    "visit_count": "Total visit count",
+    "visitor_count": "Total Visitors",
+    "visit_count": "Total Visits",
     "button-all": "All",
     "paginator": {
       "newer": "Newer",
@@ -48,12 +48,12 @@
       "next": "Next"
     },
     "more-tags": "View more",
-    "admin-user": "Owner",
+    "admin-user": "Author",
     "shared-on": "shared on",
-    "recently-search": "Recently searched",
-    "search-result": "Found [total] records",
+    "recently-search": "Recent searches",
+    "search-result": "Found [total] results",
     "no-recent-search": "No recent searches.",
-    "no-search-result": "No records found.",
+    "no-search-result": "No results found.",
     "cmd-to-select": "to select",
     "cmd-to-navigate": "to navigate",
     "cmd-to-close": "to close",
@@ -63,14 +63,14 @@
     "tips-back-to-home": "Back to home",
     "tips-open-search": "Open search",
     "default-category": "Article",
-    "default-tag": "unsorted",
-    "empty-tag": "Current no tags were found.",
+    "default-tag": "Uncategorized",
+    "empty-tag": "No tags found.",
     "pinned": "Pinned",
     "featured": "Featured",
-    "login": "LOGIN",
-    "logout":"Logout",
-    "personal-center":"Personal Center",
-    "running-time":"Running Time",
-    "view-count":"View Count"
+    "login": "Login",
+    "logout": "Logout",
+    "personal-center": "Personal Center",
+    "running-time": "Running Time",
+    "view-count": "Total Views"
   }
 }

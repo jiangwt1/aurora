@@ -17,6 +17,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import infiniteScroll from 'vue3-infinite-scroll-better'
 import v3ImgPreview from 'v3-img-preview'
 import 'mavon-editor/dist/css/index.css'
+import { ElNotification } from 'element-plus'
 import api from './api/api'
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
@@ -35,6 +36,9 @@ export const app = createApp(App)
     loading: defaultCover,
     error: defaultCover
   })
+
+// 全局注册 $notify
+app.config.globalProperties.$notify = ElNotification
 const userStore = useUserStore()
 axios.interceptors.request.use((config: any) => {
   if (config.url && config.url.startsWith('/')) {

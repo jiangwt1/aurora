@@ -57,7 +57,7 @@ export const useAppStore = defineStore('appStore', {
   actions: {
     changeLocale(locale: string) {
       cookies.set('locale', locale, { expires: 7 })
-      i18n.global.locale = locale
+      i18n.global.locale.value = locale
     },
     initializeTheme(mode: string) {
       setTheme(mode)
@@ -76,13 +76,18 @@ export const useAppStore = defineStore('appStore', {
       this.appLoading = true
     },
     endLoading() {
+      if (this.NPTimeout !== -1) clearTimeout(this.NPTimeout)
+      if (this.loadingTimeout !== -1) clearTimeout(this.loadingTimeout)
+
+      nProgress.done()
+
       this.NPTimeout = <any>setTimeout(() => {
-        nProgress.done()
-      }, 100)
+        nProgress.remove()
+      }, 300)
 
       this.loadingTimeout = <any>setTimeout(() => {
         this.appLoading = false
-      }, 300)
+      }, 500)
     }
   }
 })

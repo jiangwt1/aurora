@@ -7,9 +7,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://154.217.234.121:4886/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: 
+    password: Jiang@@0305091200&
     hikari:
       minimum-idle: 10
       idle-timeout: 180000
@@ -20,9 +20,9 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
   redis:
-    host: 127.0.0.1
+    host: 154.217.234.121
     port: 6379
-    password: 
+    password: Jiang@@0305091200&
     database: 1
     timeout: 30000
     lettuce:
@@ -41,7 +41,7 @@ spring:
     command-timeout: 30000
 
   rabbitmq:
-    host: 127.0.0.1
+    host: 81.68.69.57
     port: 5672
     username: guest
     password: guest
@@ -54,13 +54,12 @@ spring:
 
   elasticsearch:
     rest:
-      uris: 127.0.0.1:9200
+      uris: es的ip:9200
 
   mail:
-    #qq是smtp.qq.com
     host: smtp.163.com
-    username: 
-    password: 
+    username: jw940658582@163.com
+    password: TUirXYZ9bJxgD4FG
     default-encoding: UTF-8
     protocol: smtp
     port: 465
@@ -102,6 +101,6 @@ jwt:
   secret: aurora
 
 qq:
-  app-id: QQ APPID
+  app-id: 102884037
   check-token-url: https://graph.qq.com/oauth2.0/me?access_token={access_token}
   user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}
