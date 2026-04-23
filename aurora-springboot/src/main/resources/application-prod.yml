@@ -7,9 +7,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://154.217.234.121:4886/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: Jiang@@0305091200&
+    password: 127.0.0.1
     hikari:
       minimum-idle: 10
       idle-timeout: 180000
@@ -20,9 +20,9 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
   redis:
-    host: 154.217.234.121
+    host: 127.0.0.1
     port: 6379
-    password: Jiang@@0305091200&
+    password:
     database: 1
     timeout: 30000
     lettuce:
@@ -41,7 +41,7 @@ spring:
     command-timeout: 30000
 
   rabbitmq:
-    host: 81.68.69.57
+    host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
@@ -58,8 +58,8 @@ spring:
 
   mail:
     host: smtp.163.com
-    username: jw940658582@163.com
-    password: TUirXYZ9bJxgD4FG
+    username: 
+    password:
     default-encoding: UTF-8
     protocol: smtp
     port: 465
