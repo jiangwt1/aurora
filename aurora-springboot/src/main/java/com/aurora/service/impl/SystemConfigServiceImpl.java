@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.aurora.constant.RedisConstant.SYSTEM_CONFIG;
 
@@ -61,42 +63,62 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSystemConfig(SystemConfigVO systemConfigVO) {
+        // 构建配置 Map，只包含非 null 的值
         Map<String, String> configMap = new HashMap<>();
-        configMap.put("website.url", systemConfigVO.getWebsiteUrl());
-        configMap.put("website.name", systemConfigVO.getWebsiteName());
-        configMap.put("website.message", systemConfigVO.getWebsiteMessage());
-        configMap.put("friendLink.url", systemConfigVO.getFriendLinkUrl());
-        configMap.put("friendLink.email", systemConfigVO.getFriendLinkEmail());
-        configMap.put("search.mode", systemConfigVO.getSearchMode());
-        configMap.put("upload.mode", systemConfigVO.getUploadMode());
-        configMap.put("upload.oss.url", systemConfigVO.getUploadOssUrl());
-        configMap.put("upload.oss.endpoint", systemConfigVO.getUploadOssEndpoint());
-        configMap.put("upload.oss.accessKeyId", systemConfigVO.getUploadOssAccessKeyId());
-        configMap.put("upload.oss.accessKeySecret", systemConfigVO.getUploadOssAccessKeySecret());
-        configMap.put("upload.oss.bucketName", systemConfigVO.getUploadOssBucketName());
-        configMap.put("upload.minio.url", systemConfigVO.getUploadMinioUrl());
-        configMap.put("upload.minio.endpoint", systemConfigVO.getUploadMinioEndpoint());
-        configMap.put("upload.minio.accesskey", systemConfigVO.getUploadMinioAccesskey());
-        configMap.put("upload.minio.secretKey", systemConfigVO.getUploadMinioSecretKey());
-        configMap.put("upload.minio.bucketName", systemConfigVO.getUploadMinioBucketName());
-        configMap.put("upload.local.username", systemConfigVO.getUploadLocalUsername());
-        configMap.put("upload.local.password", systemConfigVO.getUploadLocalPassword());
-        configMap.put("upload.local.imagePath", systemConfigVO.getUploadLocalImagePath());
-        configMap.put("upload.local.baseUrl", systemConfigVO.getUploadLocalBaseUrl());
-        configMap.put("upload.local.bucketName", systemConfigVO.getUploadLocalBucketName());
-        configMap.put("login.backgroundImage", systemConfigVO.getLoginBackgroundImage());
+        putIfNotNull(configMap, "website.url", systemConfigVO.getWebsiteUrl());
+        putIfNotNull(configMap, "website.name", systemConfigVO.getWebsiteName());
+        putIfNotNull(configMap, "website.message", systemConfigVO.getWebsiteMessage());
+        putIfNotNull(configMap, "friendLink.url", systemConfigVO.getFriendLinkUrl());
+        putIfNotNull(configMap, "friendLink.email", systemConfigVO.getFriendLinkEmail());
+        putIfNotNull(configMap, "search.mode", systemConfigVO.getSearchMode());
+        putIfNotNull(configMap, "upload.mode", systemConfigVO.getUploadMode());
+        putIfNotNull(configMap, "upload.oss.url", systemConfigVO.getUploadOssUrl());
+        putIfNotNull(configMap, "upload.oss.endpoint", systemConfigVO.getUploadOssEndpoint());
+        putIfNotNull(configMap, "upload.oss.accessKeyId", systemConfigVO.getUploadOssAccessKeyId());
+        putIfNotNull(configMap, "upload.oss.accessKeySecret", systemConfigVO.getUploadOssAccessKeySecret());
+        putIfNotNull(configMap, "upload.oss.bucketName", systemConfigVO.getUploadOssBucketName());
+        putIfNotNull(configMap, "upload.minio.url", systemConfigVO.getUploadMinioUrl());
+        putIfNotNull(configMap, "upload.minio.endpoint", systemConfigVO.getUploadMinioEndpoint());
+        putIfNotNull(configMap, "upload.minio.accesskey", systemConfigVO.getUploadMinioAccesskey());
+        putIfNotNull(configMap, "upload.minio.secretKey", systemConfigVO.getUploadMinioSecretKey());
+        putIfNotNull(configMap, "upload.minio.bucketName", systemConfigVO.getUploadMinioBucketName());
+        putIfNotNull(configMap, "upload.local.baseUrl", systemConfigVO.getUploadLocalBaseUrl());
+        putIfNotNull(configMap, "login.backgroundImage", systemConfigVO.getLoginBackgroundImage());
 
-        configMap.forEach((key, value) -> {
-            SystemConfig config = systemConfigMapper.selectOne(
-                    new LambdaQueryWrapper<SystemConfig>().eq(SystemConfig::getConfigKey, key)
+        // 批量更新：一次查询所有配置，然后批量更新
+        if (!configMap.isEmpty()) {
+            List<String> keys = new ArrayList<>(configMap.keySet());
+            List<SystemConfig> configs = systemConfigMapper.selectList(
+                    new LambdaQueryWrapper<SystemConfig>().in(SystemConfig::getConfigKey, keys)
             );
-            if (config != null) {
-                config.setConfigValue(value);
-                systemConfigMapper.updateById(config);
+
+            // 创建 key -> config 的映射
+            Map<String, SystemConfig> configMapByKey = configs.stream()
+                    .collect(Collectors.toMap(SystemConfig::getConfigKey, c -> c));
+
+            // 收集需要更新的配置
+            List<SystemConfig> configsToUpdate = new ArrayList<>();
+            for (Map.Entry<String, String> entry : configMap.entrySet()) {
+                SystemConfig config = configMapByKey.get(entry.getKey());
+                if (config != null) {
+                    config.setConfigValue(entry.getValue());
+                    configsToUpdate.add(config);
+                }
             }
-        });
+
+            // 批量保存
+            if (!configsToUpdate.isEmpty()) {
+                updateBatchById(configsToUpdate);
+            }
+        }
 
         redisService.del(SYSTEM_CONFIG);
+    }
+
+    private void putIfNotNull(Map<String, String> map, String key, String value) {
+        if (value != null) {
+            map.put(key, value);
+        }
     }
 
     private Map<String, String> getConfigMap() {
