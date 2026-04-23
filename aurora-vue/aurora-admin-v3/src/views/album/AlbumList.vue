@@ -250,27 +250,28 @@ function handleDeleteAlbum(album) {
 }
 
 // 上传封面
-function handleUploadCover({ file }) {
+function handleUploadCover({ file, onFinish, onError }) {
   const formData = new FormData()
   formData.append('file', file.file)
 
   uploadAlbumCoverApi(formData).then(res => {
-    // 兼容不同的返回格式
-    let coverUrl = ''
     if (res.flag) {
-      coverUrl = res.data?.url || res.data?.src || res.data?.coverUrl || res.data
-    }
-
-    if (coverUrl) {
-      albumForm.value.albumCover = coverUrl
+      // 兼容不同的返回格式
+      albumForm.value.albumCover = res.data?.url || res.data?.src || res.data?.coverUrl || res.data
       message.success('上传封面成功')
+      onFinish()
     } else {
-      message.error('上传封面失败：未获取到图片地址')
+      message.error(res.message || '上传封面失败')
+      onError()
     }
   }).catch(err => {
     console.error('上传封面失败:', err)
     message.error('上传封面失败')
+    onError()
   })
+
+  // 返回 false 阻止默认上传行为
+  return false
 }
 
 function handlePageChange(page) {

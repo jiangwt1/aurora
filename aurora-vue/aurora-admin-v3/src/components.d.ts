@@ -16,7 +16,6 @@ declare module '@vue/runtime-core' {
     Hour: typeof import('./components/Crontab/hour.vue')['default']
     Min: typeof import('./components/Crontab/min.vue')['default']
     Month: typeof import('./components/Crontab/month.vue')['default']
-    NAlert: typeof import('naive-ui')['NAlert']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NBadge: typeof import('naive-ui')['NBadge']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']

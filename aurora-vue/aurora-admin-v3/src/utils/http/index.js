@@ -19,6 +19,11 @@ service.interceptors.request.use(
       config.headers.Authorization = 'Bearer ' + token
     }
 
+    // 如果 data 是 FormData 类型，不设置 Content-Type，让浏览器自动处理
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
+    }
+
     return config
   },
   (error) => {
