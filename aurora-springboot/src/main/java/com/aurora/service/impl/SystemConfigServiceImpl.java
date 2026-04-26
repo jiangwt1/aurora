@@ -51,11 +51,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
                 .uploadMinioAccesskey(configMap.get("upload.minio.accesskey"))
                 .uploadMinioSecretKey(configMap.get("upload.minio.secretKey"))
                 .uploadMinioBucketName(configMap.get("upload.minio.bucketName"))
-                .uploadLocalUsername(configMap.get("upload.local.username"))
-                .uploadLocalPassword(configMap.get("upload.local.password"))
-                .uploadLocalImagePath(configMap.get("upload.local.imagePath"))
-                .uploadLocalBaseUrl(configMap.get("upload.local.baseUrl"))
-                .uploadLocalBucketName(configMap.get("upload.local.bucketName"))
+                .uploadLocalPath(configMap.get("upload.local.path"))
                 .loginBackgroundImage(configMap.get("login.backgroundImage"))
                 .build();
     }
@@ -82,7 +78,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
         putIfNotNull(configMap, "upload.minio.accesskey", systemConfigVO.getUploadMinioAccesskey());
         putIfNotNull(configMap, "upload.minio.secretKey", systemConfigVO.getUploadMinioSecretKey());
         putIfNotNull(configMap, "upload.minio.bucketName", systemConfigVO.getUploadMinioBucketName());
-        putIfNotNull(configMap, "upload.local.baseUrl", systemConfigVO.getUploadLocalBaseUrl());
+        putIfNotNull(configMap, "upload.local.path", systemConfigVO.getUploadLocalPath());
         putIfNotNull(configMap, "login.backgroundImage", systemConfigVO.getLoginBackgroundImage());
 
         // 批量更新：一次查询所有配置，然后批量更新

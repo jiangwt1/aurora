@@ -65,20 +65,8 @@ public class SystemConfigVO {
     @ApiModelProperty(name = "uploadMinioBucketName", value = "MinIO BucketName", dataType = "String")
     private String uploadMinioBucketName;
 
-    @ApiModelProperty(name = "uploadLocalUsername", value = "Local用户名", dataType = "String")
-    private String uploadLocalUsername;
-
-    @ApiModelProperty(name = "uploadLocalPassword", value = "Local密码", dataType = "String")
-    private String uploadLocalPassword;
-
-    @ApiModelProperty(name = "uploadLocalImagePath", value = "Local图片路径", dataType = "String")
-    private String uploadLocalImagePath;
-
-    @ApiModelProperty(name = "uploadLocalBaseUrl", value = "Local基础URL", dataType = "String")
-    private String uploadLocalBaseUrl;
-
-    @ApiModelProperty(name = "uploadLocalBucketName", value = "Local BucketName", dataType = "String")
-    private String uploadLocalBucketName;
+    @ApiModelProperty(name = "uploadLocalPath", value = "Local自定义路径", dataType = "String")
+    private String uploadLocalPath;
 
     @ApiModelProperty(name = "loginBackgroundImage", value = "登录背景图片URL", dataType = "String")
     private String loginBackgroundImage;

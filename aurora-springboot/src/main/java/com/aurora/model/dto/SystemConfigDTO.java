@@ -45,15 +45,7 @@ public class SystemConfigDTO {
 
     private String uploadMinioBucketName;
 
-    private String uploadLocalUsername;
-
-    private String uploadLocalPassword;
-
-    private String uploadLocalImagePath;
-
-    private String uploadLocalBaseUrl;
-
-    private String uploadLocalBucketName;
+    private String uploadLocalPath;
 
     private String loginBackgroundImage;
 

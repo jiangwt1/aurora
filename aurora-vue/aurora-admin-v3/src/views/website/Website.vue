@@ -342,8 +342,11 @@
 
             <!-- 本地配置 -->
             <div v-if="systemConfig.uploadMode === 'local'">
-              <n-form-item label="基础URL" path="uploadLocalBaseUrl">
-                <n-input v-model:value="systemConfig.uploadLocalBaseUrl" placeholder="必填，如：https://www.域名/api/images/" style="width: 400px" />
+              <n-form-item label="自定义路径">
+                <n-switch v-model:value="localPathEnabled" />
+              </n-form-item>
+              <n-form-item v-if="localPathEnabled" label="存储路径" path="uploadLocalPath">
+                <n-input v-model:value="systemConfig.uploadLocalPath" placeholder="如：D:\photos\ 或 /data/uploads/" style="width: 400px" />
               </n-form-item>
             </div>
 
@@ -377,7 +380,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { AddOutline } from '@vicons/ionicons5'
 import { getWebsiteConfigApi, updateWebsiteConfigApi } from '@/api/website'
@@ -452,9 +455,13 @@ const systemConfig = reactive({
   uploadMinioEndpoint: '',
   uploadMinioAccesskey: '',
   uploadMinioSecretKey: '',
-  uploadMinioBucketName: '',
-  uploadLocalBaseUrl: '',
+  uploadLocalPath: '',
   loginBackgroundImage: ''
+})
+
+const localPathEnabled = ref(false)
+watch(localPathEnabled, (val) => {
+  if (!val) systemConfig.uploadLocalPath = ''
 })
 
 function fetchWebsiteConfig() {
@@ -491,6 +498,7 @@ function fetchWebsiteConfig() {
 function fetchSystemConfig() {
   getSystemConfigApi().then(res => {
     Object.assign(systemConfig, res.data)
+    localPathEnabled.value = !!res.data.uploadLocalPath
   }).catch(err => {
     console.error('获取系统配置失败:', err)
     message.error('获取系统配置失败')

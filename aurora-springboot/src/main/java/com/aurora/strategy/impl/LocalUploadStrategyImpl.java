@@ -1,6 +1,5 @@
 package com.aurora.strategy.impl;
 
-import com.aurora.exception.BizException;
 import com.aurora.service.SystemConfigProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,35 +16,40 @@ public class LocalUploadStrategyImpl extends AbstractUploadStrategyImpl {
     @Autowired
     private SystemConfigProviderService configProvider;
 
-    private String imagePath;
+    private String defaultImagePath;
 
     @PostConstruct
     public void init() {
-        // 使用项目根目录下的images文件夹
         String projectPath = System.getProperty("user.dir");
-        imagePath = projectPath + File.separator + "images";
-        
-        // 确保images目录存在
-        File imageDir = new File(imagePath);
+        defaultImagePath = projectPath + File.separator + "images";
+
+        File imageDir = new File(defaultImagePath);
         if (!imageDir.exists()) {
             imageDir.mkdirs();
         }
     }
 
+    private String getStoragePath() {
+        String customPath = configProvider.getConfig("upload.local.path", "");
+        if (customPath == null || customPath.trim().isEmpty()) {
+            return defaultImagePath;
+        }
+        return customPath;
+    }
+
     @Override
     public Boolean exists(String filePath) {
-        return new File(imagePath + File.separator + filePath).exists();
+        return new File(getStoragePath() + File.separator + filePath).exists();
     }
 
     @Override
     public void upload(String path, String fileName, InputStream inputStream) throws IOException {
-        // 确保子目录存在
-        File directory = new File(imagePath + File.separator + path);
+        String storagePath = getStoragePath();
+        File directory = new File(storagePath + File.separator + path);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        // 写入文件
         File file = new File(directory, fileName);
         try (InputStream in = inputStream;
              FileOutputStream out = new FileOutputStream(file)) {
@@ -59,19 +63,6 @@ public class LocalUploadStrategyImpl extends AbstractUploadStrategyImpl {
 
     @Override
     public String getFileAccessUrl(String filePath) {
-        // 从数据库读取配置的baseUrl
-        String baseUrl = configProvider.getConfig("upload.local.baseUrl", "");
-        
-        // 如果没有配置baseUrl，抛出异常
-        if (baseUrl == null || baseUrl.trim().isEmpty()) {
-            throw new BizException("本地上传模式未配置基础URL，请在【系统管理-网站管理-系统设置】中配置基础URL");
-        }
-        
-        // 确保baseUrl以/结尾
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/";
-        }
-        
-        return baseUrl + filePath;
+        return "/api/images/" + filePath;
     }
 }

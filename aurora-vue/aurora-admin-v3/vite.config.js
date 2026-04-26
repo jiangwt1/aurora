@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import UnoCSS from 'unocss/vite'
@@ -8,12 +8,8 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import viteCompression from 'vite-plugin-compression'
 
-export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd())
-  const { VITE_PORT, VITE_BASE_URL, VITE_PUBLIC_PATH } = env
-
-  return {
-    base: VITE_PUBLIC_PATH || '/',
+export default defineConfig({
+  base: '/',
     plugins: [
       vue(),
       UnoCSS(),
@@ -59,7 +55,7 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     server: {
-      port: Number(VITE_PORT) || 81,
+      port: 81,
       open: false,
       hmr: {
         // 热更新时不自动刷新页面
@@ -67,7 +63,7 @@ export default defineConfig(({ command, mode }) => {
       },
       proxy: {
         '/api': {
-          target: VITE_BASE_URL || 'http://127.0.0.1:8080',
+          target: 'http://127.0.0.1:8080',
           changeOrigin: true,
           secure: true,
           // 保留 /api 前缀，重写路径： 凞成空字符串
@@ -100,5 +96,4 @@ export default defineConfig(({ command, mode }) => {
         }
       }
     }
-  }
 })
