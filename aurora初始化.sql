@@ -790,7 +790,7 @@ INSERT INTO `t_system_config` VALUES (14, 'upload.minio.endpoint', NULL, 'MinIO 
 INSERT INTO `t_system_config` VALUES (15, 'upload.minio.accesskey', NULL, 'MinIO AccessKey', '2026-01-01 17:12:30', '2026-04-21 04:32:05');
 INSERT INTO `t_system_config` VALUES (16, 'upload.minio.secretKey', NULL, 'MinIO SecretKey', '2026-01-01 17:12:30', '2026-04-21 04:32:06');
 INSERT INTO `t_system_config` VALUES (17, 'upload.minio.bucketName', NULL, 'MinIO BucketName', '2026-01-01 17:12:30', '2026-04-21 04:32:06');
-INSERT INTO `t_system_config` VALUES (18, 'upload.local.baseUrl', NULL, 'Local基础URL', '2026-01-01 17:12:30', '2026-04-21 04:32:07');
+INSERT INTO `t_system_config` VALUES (18, 'upload.local.path', NULL, '图片存储路径', '2026-01-01 17:12:30', '2026-04-21 04:32:07');
 INSERT INTO `t_system_config` VALUES (19, 'login.backgroundImage', NULL, '登录背景图片URL', '2026-01-01 17:12:30', '2026-04-21 04:32:07');
 
 -- ----------------------------
