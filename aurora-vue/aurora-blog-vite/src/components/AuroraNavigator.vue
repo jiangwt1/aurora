@@ -164,12 +164,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #Ob-Navigator {
-  @apply fixed flex justify-center items-center bottom-4 right-4 w-12 h-12 rounded-full z-40 shadow-lg text-white text-2xl stroke-0 border-2 border-ob-deep-900 cursor-pointer;
+  @apply fixed flex justify-center items-center bottom-4 right-4 w-12 h-12 rounded-full z-40 shadow-lg text-white text-2xl border-2 border-ob-deep-900 cursor-pointer;
   transition: all 0.55s cubic-bezier(0, 1.8, 1, 1.2);
   opacity: 1;
   svg {
     pointer-events: none;
     stroke: currentColor !important;
+    stroke-width: inherit;
   }
   .Ob-Navigator-submenu {
     @apply absolute top-0 left-0 m-0 p-0 list-none;
