@@ -36,8 +36,10 @@ export const useAppStore = defineStore('appStore', {
         header_gradient_css: 'linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%)',
         background_gradient_style: {
           background: 'linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%)',
+          'background-clip': 'text',
           '-webkit-background-clip': 'text',
           '-webkit-text-fill-color': 'transparent',
+          color: 'transparent',
           '-webkit-box-decoration-break': 'clone',
           'box-decoration-break': 'clone'
         }
