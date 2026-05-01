@@ -13,6 +13,13 @@
             />
             <div class="button-group">
               <n-button
+                v-if="article.id && article.status !== 3"
+                size="large"
+                @click="updateArticleContent"
+              >
+                保存
+              </n-button>
+              <n-button
                 v-if="!article.id || article.status === 3"
                 size="large"
                 @click="saveArticleDraft"
@@ -528,9 +535,90 @@ function saveOrUpdateArticle() {
   showPublishModal.value = false
 }
 
+// 将4空格缩进代码块转换为```围栏格式
+function normalizeCodeBlocks(content) {
+  if (!content) return content
+  const lines = content.split('\n')
+  const result = []
+  let inCodeBlock = false
+  let inFencedBlock = false
+  let codeLines = []
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+
+    // 跟踪```围栏状态，避免误处理围栏内的内容
+    if (/^```/.test(line.trim())) {
+      if (inFencedBlock) {
+        inFencedBlock = false
+      } else {
+        inFencedBlock = true
+      }
+      result.push(line)
+      continue
+    }
+    if (inFencedBlock) {
+      result.push(line)
+      continue
+    }
+
+    const isIndented = line.startsWith('    ') || (line.length > 0 && line.charCodeAt(0) === 9)
+
+    if (isIndented) {
+      if (!inCodeBlock) {
+        if (result.length > 0 && result[result.length - 1] !== '') {
+          result.push('')
+        }
+        result.push('```')
+        inCodeBlock = true
+      }
+      codeLines.push(line.replace(/^    /, ''))
+    } else {
+      if (inCodeBlock) {
+        result.push(...codeLines)
+        result.push('```')
+        result.push('')
+        codeLines = []
+        inCodeBlock = false
+      }
+      result.push(line)
+    }
+  }
+  if (inCodeBlock) {
+    result.push(...codeLines)
+    result.push('```')
+  }
+  return result.join('\n')
+}
+
+// 保存已发布文章的内容修改
+async function updateArticleContent() {
+  if (!article.articleTitle?.trim()) {
+    message.error('文章标题不能为空')
+    return
+  }
+  if (!article.articleContent?.trim()) {
+    message.error('文章内容不能为空')
+    return
+  }
+  try {
+    article.articleContent = normalizeCodeBlocks(article.articleContent)
+    const res = await request.post('/api/admin/articles', article)
+    if (res.flag) {
+      message.success('保存成功')
+    } else {
+      message.error(res.message || '保存失败')
+    }
+  } catch (error) {
+    console.error('保存失败:', error)
+    message.error('保存失败')
+  }
+}
+
 // 保存文章
 async function saveArticle() {
   try {
+    article.articleContent = normalizeCodeBlocks(article.articleContent)
     const res = await request.post('/api/admin/articles', article)
     if (res.flag) {
       message.success(res.message || '保存成功')
