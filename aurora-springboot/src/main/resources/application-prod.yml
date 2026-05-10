@@ -12,11 +12,11 @@ spring:
     password: 127.0.0.1
     hikari:
       minimum-idle: 10
-      idle-timeout: 180000
+      idle-timeout: 300000
       maximum-pool-size: 100
       auto-commit: true
       pool-name: MyHikariCP
-      max-lifetime: 60000
+      max-lifetime: 600000
       connection-timeout: 30000
       connection-test-query: SELECT 1
   redis:
